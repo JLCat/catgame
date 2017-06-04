@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Coiny');
+
 html, body {
   height: 100%;
   background-color: #ffb400;
@@ -10,15 +11,17 @@ body {
   text-align: center;
   text-shadow: 0 2px 3px rgba(0, 0, 0, .5);
   overflow-y: scroll;
+  background-image: url("../imgs/bg.png");
+  background-repeat: repeat;
 }
 
-a,
-a:focus {
+a {
+  text-decoration: none;
   color: #362e2b;
 }
 
 a:hover {
-  text-decoration: none;
+  color: #ffffff;
 }
 
 .site-wrapper {
