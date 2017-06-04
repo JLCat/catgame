@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Coiny');
-
 html, body {
   height: 100%;
   background-color: #ffb400;
@@ -11,8 +10,6 @@ body {
   text-align: center;
   text-shadow: 0 2px 3px rgba(0, 0, 0, .5);
   overflow-y: scroll;
-  background-image: url("../imgs/bg.png");
-  background-repeat: repeat;
 }
 
 a {
@@ -27,42 +24,43 @@ a:hover {
 .site-wrapper {
   width: 100%;
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 50px rgba(0,0,0,.5);
-          box-shadow: inset 0 0 50px rgba(0,0,0,.5);
+  -webkit-box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+  background-image: url("../imgs/bg.png");
 }
 
 .inner {
-  margin: 3rem 3rem;
+  margin: 30px 30px;
 }
 
 .header-inner {
   background-image: url("../imgs/logo.png");
   background-repeat: no-repeat;
   background-position: center;
-  height: 12rem;
-  margin-top: 5rem;
+  height: 120px;
+  margin-top: 50px;
 }
 
 .games {
   display: flex;
   justify-content: center;
-  font-size: 3rem;
-  padding: 1rem 0;
+  font-size: 30px;
+  padding: 10px 0;
 }
 
 .icon {
-  width: 10rem;
-  height: 5rem;
+  width: 140px;
+  height: 50px;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .name {
-  padding-left: 3rem;
-  width: 30rem;
-  height: 5rem;
-  line-height: 5rem;
-  font-size: 3rem;
+  padding-left: 30px;
+  width: 400px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
   text-align: left;
 }
 
@@ -82,5 +80,5 @@ a:hover {
   background-image: url("../imgs/author.png");
   background-repeat: no-repeat;
   background-position: center;
-  height: 10rem;
+  height: 100px;
 }
