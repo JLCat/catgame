@@ -10,9 +10,6 @@ body {
   text-align: center;
   text-shadow: 0 2px 3px rgba(0, 0, 0, .5);
   overflow-y: scroll;
-  background-image: url("../imgs/bg.png");
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 a,
