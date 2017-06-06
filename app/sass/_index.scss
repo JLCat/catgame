@@ -1,0 +1,78 @@
+.site-wrapper {
+  width: 100%;
+  min-height: 100%;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+  background-image: $siteBackground;
+}
+
+.inner {
+  margin: 30px;
+}
+
+.header-inner {
+  background-image: $siteLogo;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 140px;
+  margin-top: 50px;
+}
+
+.game-select {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.icon {
+  width: 160px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game-name {
+  padding-left: 30px;
+  width: 400px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+  text-align: left;
+}
+
+.icon.game1 {
+  background-image: $imgGame1;
+}
+
+.icon.game2 {
+  background-image: $imgGame2;
+}
+
+.icon.game3 {
+  background-image: $imgGame3;
+}
+
+.footer-inner {
+  background-image: $siteAuthor;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    background-size: contain;
+  }
+
+  .footer-inner {
+    background-size: contain;
+  }
+
+  .icon {
+    background-size: contain;
+  }
+
+  .game-name {
+    font-size: 20px;
+  }
+}

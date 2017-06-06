@@ -1,0 +1,27 @@
+* {
+  user-select: none;
+}
+
+a {
+  text-decoration: none;
+  color: $secondaryColor;
+}
+
+a:focus,
+a:hover {
+  color: $lightColor;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  font-size: 10px;
+  font-family: 'Coiny', cursive;
+  color: $secondaryColor;
+  text-align: center;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, .5);
+  background-color: $primaryColor;
+}
