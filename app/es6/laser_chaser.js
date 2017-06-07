@@ -131,7 +131,7 @@ let timer = 0;
 const animate = () => {
   clearScreen();
 
-  let drawSize = 50;
+  let drawSize = 75;
   let halfSize = drawSize / 2;
   let drawX = laser.x - halfSize;
   let drawY = laser.y - halfSize;
@@ -143,10 +143,8 @@ const animate = () => {
 
   let movement = Math.round(Math.random() * 10);
 
-  let rs = Math.random() * 1000;
+  let rs = Math.random() * 100;
   if (rs < 10) {
-    doBlink();
-  } else if (rs < 50) {
     doTwinkle();
   } else {
     doMoving();
