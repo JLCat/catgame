@@ -24,32 +24,18 @@ let context = null;
 let pause = false;
 let border = 10;
 let frameRate = 1000 / 60;
-let frames = [];
-let frame = 0;
+let frame = null;
 let now = null;
 let then = Date.now();
 let delta = null;
 
-let assets = [
-  'imgs/001.png',
-  'imgs/002.png',
-  'imgs/002.png',
-  'imgs/003.png',
-  'imgs/003.png',
-  'imgs/002.png',
-  'imgs/002.png',
-  'imgs/001.png'
-];
-
-let rat = {
+let laser = {
   x: window.innerWidth / 2,
   y: window.innerHeight / 2,
-  a: 0,
   dx: 0,
   dy: 0,
-  da: 0,
-  runSpeed: 5,
-  rotateSpeed: 10
+  speed: 5,
+  stat: 'moving'
 };
 
 let coordinate = {
@@ -68,41 +54,14 @@ const onImageLoad = () => {
   console.log("Image loaded!");
 };
 
-const Sprite = function(filename) {
-  this.image = null;
-  this.pattern = null;
-  this.TO_RADIANS = Math.PI / 180;
-
-  if (filename != undefined && filename != "" && filename != null) {
-    this.image = new Image();
-    this.image.onload = onImageLoad;
-    this.image.src = filename;
-  } else {
-    console.log(`Image ${filename} not found!`);
-  }
-
-  this.draw = (x, y, size) => {
-    context.drawImage(this.image, x, y, size, size);
-  }
-
-  this.rotate = (x, y, size, angle) => {
-    context.save();
-    context.translate(x, y);
-    context.rotate(angle * this.TO_RADIANS);
-    context.drawImage(this.image, -(size / 2), -(size / 2), size, size);
-    context.restore();
-  }
-}
-
 const setup = () => {
   canvas = document.getElementById("canvas");
   context = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
-  for (let i = 0; i < assets.length; i++) {
-    frames.push(new Sprite(assets[i]));
-  }
+  frame = new Image();
+  frame.onload = onImageLoad();
+  frame.src = 'imgs/point.png';
 };
 
 const tick = () => {
@@ -125,103 +84,92 @@ const randomCoordinate = () => {
   coordinate.y = border + Math.round(Math.random() * (window.innerHeight - border * 2));
 };
 
-const getSpeed = (rx, ry, cx, cy) => {
-  let x = cx - rx;
-  let y = cy - ry;
+const getSpeed = (lx, ly, cx, cy) => {
+  let x = cx - lx;
+  let y = cy - ly;
   let z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-  let dx = x / (z / rat.runSpeed);
-  let dy = y / (z / rat.runSpeed);
+  let ds = Math.random();
 
+  let dx = x / z * laser.speed * ds;
+  let dy = y / z * laser.speed * ds;
   let speed = [dx, dy];
   return speed;
 }
 
-const getAngle = (rx, ry, cx, cy) => {
-  let x = Math.abs(rx - cx);
-  let y = Math.abs(ry - cy);
-  let z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
-  let cos = y / z;
-  let radina = Math.acos(cos);
-  let angle = Math.floor(180 / (Math.PI / radina));
-
-  if (cx > rx && cy > ry) { //第四象限
-    angle = 180 - angle;
+const doMoving = () => {
+  if (coordinate.x > hitbox.left && coordinate.x < hitbox.right && coordinate.y > hitbox.top && coordinate.y < hitbox.buttom) {
+    randomCoordinate();
+    let ds = Math.random() * 10 + 1;
+    let newSpeed = getSpeed(laser.x, laser.y, coordinate.x, coordinate.y);
+    laser.dx = newSpeed[0] * ds;
+    laser.dy = newSpeed[1] * ds;
   }
-
-  if (cx < rx && cy > ry) { //第三象限
-    angle = 180 + angle;
-  }
-
-  if (cx < rx && cy < ry) { //第二象限
-    angle = 360 - angle;
-  }
-
-  if (cx > rx && cy < ry) { //第一象限
-    angle = angle;
-  }
-
-  if (cx == rx && cy > ry) { //Y轴负方向
-    angle = 180;
-  }
-
-  if (cx == rx && cy < ry) { //Y轴正方向
-    angle = 0;
-  }
-
-  if (cx > rx && cy == ry) { //X轴正方向
-    angle = 90;
-  }
-
-  if (cx < rx && cy == ry) { //X轴负方向
-    angle = 360;
-  }
-
-  return angle;
 }
+
+const doTwinkle = () => {
+  let ran = Math.random() * 10;
+  let r = 5;
+  if (Math.round(ran) > 5) {
+    laser.dx = Math.random() * r;
+    laser.dy = Math.random() * r;
+  } else if (Math.round(ran) <= 5) {
+    laser.dx = Math.random() * -r;
+    laser.dy = Math.random() * -r;
+  }
+}
+
+const doBlink = () => {
+  randomCoordinate();
+  laser.x = coordinate.x;
+  laser.y = coordinate.y;
+}
+
+let ticks = 0;
+let timer = 0;
 
 const animate = () => {
   clearScreen();
 
-  let drawSize = Math.max(window.innerWidth, window.innerHeight) / 5;
+  let drawSize = 50;
   let halfSize = drawSize / 2;
-  let drawX = rat.x - halfSize;
-  let drawY = rat.y - halfSize;
+  let drawX = laser.x - halfSize;
+  let drawY = laser.y - halfSize;
 
   hitbox.left = drawX;
   hitbox.right = drawX + drawSize;
   hitbox.top = drawY;
   hitbox.buttom = drawY + drawSize;
 
-  if (coordinate.x > hitbox.left && coordinate.x < hitbox.right && coordinate.y > hitbox.top && coordinate.y < hitbox.buttom) {
-    randomCoordinate();
-  }
+  let movement = Math.round(Math.random() * 10);
 
-  let newAngle = getAngle(rat.x, rat.y, coordinate.x, coordinate.y);
-  let newSpeed = getSpeed(rat.x, rat.y, coordinate.x, coordinate.y);
-  let delta = newAngle - rat.a;
-
-  if (delta == 0) {
-    rat.dx = newSpeed[0];
-    rat.dy = newSpeed[1];
-    rat.da = 0;
+  let rs = Math.random() * 1000;
+  if (rs < 10) {
+    doBlink();
+  } else if (rs < 50) {
+    doTwinkle();
   } else {
-    if (Math.abs(delta) > rat.rotateSpeed) {
-      rat.da = delta > 0 ? rat.rotateSpeed : -rat.rotateSpeed;
-    } else {
-      rat.da = delta;
-    }
-    rat.dx = 0;
-    rat.dy = 0;
+    doMoving();
   }
 
-  rat.x += rat.dx;
-  rat.y += rat.dy;
-  rat.a += rat.da;
+  laser.x += laser.dx;
+  laser.y += laser.dy;
 
-  frames[frame].rotate(rat.x, rat.y, drawSize, rat.a);
-  frame = (frame + 1) % frames.length;
+  context.drawImage(frame, drawX, drawY, drawSize, drawSize);
+
+  if (hitbox.left < border) {
+    laser.dx = Math.random() * laser.speed + laser.speed;
+  }
+  if (hitbox.right > (window.innerWidth - border)) {
+    laser.dx = (Math.random() * laser.speed + laser.speed) * -1;
+  }
+  if (hitbox.top < border) {
+    laser.dy = Math.random() * laser.speed + laser.speed;
+  }
+  if (hitbox.buttom > (window.innerHeight - border)) {
+    laser.dy = (Math.random() * laser.speed + laser.speed) * -1;
+  }
+
 };
 
 const gameStart = () => {
