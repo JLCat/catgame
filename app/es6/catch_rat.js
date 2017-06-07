@@ -31,9 +31,15 @@ let then = Date.now();
 let delta = null;
 
 let assets = [
-  'imgs/timg.png'
-  // 'imgs/timg2.png'
-]
+  'imgs/001.png',
+  'imgs/002.png',
+  'imgs/002.png',
+  'imgs/003.png',
+  'imgs/003.png',
+  'imgs/002.png',
+  'imgs/002.png',
+  'imgs/001.png'
+];
 
 let rat = {
   x: window.innerWidth / 2,
@@ -42,16 +48,14 @@ let rat = {
   dx: 0,
   dy: 0,
   da: 0,
-  runSpeed: 8,
+  runSpeed: 5,
   rotateSpeed: 10
-}
+};
 
 let coordinate = {
   x: window.innerWidth / 2,
   y: window.innerHeight / 2
-}
-
-let ratStatus = '';
+};
 
 const onImageLoad = () => {
   console.log("Image loaded!");
@@ -114,7 +118,7 @@ const randomCoordinate = () => {
   coordinate.y = border + Math.round(Math.random() * (window.innerHeight - border * 2));
 };
 
-const getSpeen = (rx, ry, cx, cy) => {
+const getSpeed = (rx, ry, cx, cy) => {
   let x = cx - rx;
   let y = cy - ry;
   let z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -132,8 +136,8 @@ const getAngle = (rx, ry, cx, cy) => {
   let z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
   let cos = y / z;
-  let radina = Math.acos(cos); //用反三角函数求弧度
-  let angle = Math.floor(180 / (Math.PI / radina)); //将弧度转换成角度
+  let radina = Math.acos(cos);
+  let angle = Math.floor(180 / (Math.PI / radina));
 
   if (cx > rx && cy > ry) { //第四象限
     angle = 180 - angle;
@@ -173,7 +177,7 @@ const getAngle = (rx, ry, cx, cy) => {
 const animate = () => {
   clearScreen();
 
-  let drawSize = window.innerWidth / 10;
+  let drawSize = Math.max(window.innerWidth, window.innerHeight) / 5;
   let halfSize = drawSize / 2;
   let drawX = rat.x - halfSize;
   let drawY = rat.y - halfSize;
@@ -190,7 +194,7 @@ const animate = () => {
   }
 
   let newAngle = getAngle(rat.x, rat.y, coordinate.x, coordinate.y);
-  let newSpeed = getSpeen(rat.x, rat.y, coordinate.x, coordinate.y);
+  let newSpeed = getSpeed(rat.x, rat.y, coordinate.x, coordinate.y);
   let delta = newAngle - rat.a;
 
   if (delta == 0) {
@@ -239,7 +243,6 @@ const gameStart = () => {
 
 const gameStop = () => {
   pause = true;
-  clearScreen();
 };
 
 const gameListener = () => {
